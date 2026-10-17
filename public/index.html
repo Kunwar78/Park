@@ -8,24 +8,21 @@
  <h1>PCN Details</h1>
  <p>Enter the details exactly as printed on your demo notice.</p>
  <form id="f" autocomplete="off">
-  <div class="row"><label for="vrn">Vehicle Registration Number *</label><input id="vrn" style="max-width:400px"></div>
-  <div class="row"><label for="pcn">Penalty Charge Notice (PCN) *</label><input id="pcn" style="max-width:400px"></div>
+  <div class="row"><label for="vrn">Vehicle Registration Number *</label><input id="vrn"></div>
+  <div class="row"><label for="pcn">Penalty Charge Notice (PCN) *</label><input id="pcn"></div>
   <div class="err" id="err"></div>
-  <div class="row" style="justify-content:flex-end;max-width:400px"><button class="btn" style="width:100%">Search</button></div>
+  <div class="row" style="justify-content:flex-end"><button class="btn">Search</button></div>
  </form>
 </main>
-<footer>© 2026 Demo Parking Authority (fictional) · <a href="admin.html">Admin</a></footer>
+<footer>© 2026 Demo Parking Authority (fictional) · <a href="admin.html" style="color:#ddd">Admin</a></footer>
 <script>
 document.getElementById('f').addEventListener('submit', async e => {
   e.preventDefault();
-  const vrn = document.getElementById('vrn').value.trim().toUpperCase();
-  const pcn = document.getElementById('pcn').value.trim().toUpperCase();
-  const err = document.getElementById('err');
+  const vrn = vrn_.value.trim(), pcn = pcn_.value.trim(), err = document.getElementById('err');
   if (!vrn || !pcn) { err.textContent = 'Please enter both fields.'; return; }
-  err.textContent = '';
-  const r = await fetch('/api/lookup', {method:'POST',
-    headers:{'Content-Type':'application/json'}, body: JSON.stringify({vrn, pcn})});
-  if (!r.ok) { err.textContent = 'No matching record found. Please check your details.'; return; }
-  location.href = `pcn.html?vrn=${encodeURIComponent(vrn)}&pcn=${encodeURIComponent(pcn)}`;
+  const r = await fetch('/api/lookup', {method:'POST', headers:{'Content-Type':'application/json'}, body:JSON.stringify({vrn,pcn})});
+  if (!r.ok) { err.textContent = 'No matching record found.'; return; }
+  location.href = 'pcn.html?vrn=' + encodeURIComponent(vrn) + '&pcn=' + encodeURIComponent(pcn);
 });
+const vrn_ = document.getElementById('vrn'), pcn_ = document.getElementById('pcn');
 </script></body></html>

@@ -1,0 +1,36 @@
+:root{--purple:#5c2d5e;--purple-dark:#431f45;--text:#2b2b2b;--muted:#5a5a5a;--border:#cfcfcf;}
+*{box-sizing:border-box}
+body{margin:0;font-family:Arial,Helvetica,sans-serif;color:var(--text);background:#fff;
+ padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}
+.demo-banner{background:#fff3cd;color:#664d03;text-align:center;padding:8px 12px;font-size:.85rem;border-bottom:1px solid #ffe69c}
+header{padding:18px 32px;border-bottom:1px solid var(--border)}
+header .name{font-size:1.5rem;font-weight:700;letter-spacing:.5px}
+header .sub{font-size:.75rem;letter-spacing:2px;color:var(--muted)}
+.band{background:var(--purple);height:70px}
+main{max-width:900px;margin:0 auto;padding:30px 24px 60px}
+h1{color:var(--purple);font-weight:400;font-size:2rem;margin:20px 0}
+h2{color:var(--purple);font-weight:400;font-size:1.5rem}
+.crumbs{font-size:.9rem;color:var(--purple)}
+.crumbs a{color:var(--purple)}
+.row{display:flex;justify-content:space-between;align-items:center;max-width:620px;margin-bottom:16px;gap:10px;flex-wrap:wrap}
+input,textarea,select{padding:10px 12px;font-size:1rem;border:1px solid var(--border);border-radius:2px;width:240px;max-width:100%;font-family:inherit}
+textarea{width:100%}
+.btn{background:var(--purple);color:#fff;border:0;padding:11px 30px;font-size:1rem;border-radius:3px;cursor:pointer}
+.btn:hover{background:var(--purple-dark)}
+.btn.small{padding:6px 14px;font-size:.85rem}
+.btn.danger{background:#b02a37}
+.btn[disabled]{opacity:.6;cursor:not-allowed}
+.err{color:#c0392b;font-size:.9rem;margin:6px 0 14px}
+dl.details{display:grid;grid-template-columns:230px 1fr;gap:10px 10px;font-size:1.05rem}
+dt{font-weight:700;color:var(--muted)}
+dd{margin:0}
+.actions{display:flex;gap:16px;margin:28px 0}
+.panel{border:1px solid var(--border);padding:16px;border-radius:4px;background:#faf6fa;max-width:620px;margin-top:12px}
+table{border-collapse:collapse;width:100%;font-size:.9rem;margin-top:20px}
+th,td{border:1px solid var(--border);padding:6px 8px;text-align:left}
+th{background:#f3eef3}
+.grid{display:grid;grid-template-columns:1fr 1fr;gap:12px;max-width:620px}
+.grid label{display:block;font-size:.85rem;color:var(--muted);margin-bottom:3px}
+.grid input{width:100%}
+.full{grid-column:1/-1}
+footer{background:#3d3d3d;color:#ddd;padding:16px 32px;font-size:.85rem}

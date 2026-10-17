@@ -1,0 +1,180 @@
+<!DOCTYPE html><html lang="en"><head><meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Make a Payment - Demo Parking Authority</title><link rel="stylesheet" href="style.css"></head><body>
+<div class="demo-banner">Fictional practice project. No real payment is taken.</div>
+<header><div class="name">DEMO PARKING AUTHORITY</div><div class="sub">ONLINE PAYMENTS</div></header>
+<div class="band"></div>
+<main>
+ <div class="crumbs">
+  <a href="index.html">PCN Search</a> &gt;
+  <span id="pcn-crumb"><a href="#" id="back-link">PCN details</a></span> &gt;
+  <b id="step-title">Payment</b>
+ </div>
+
+ <!-- Step indicator -->
+ <ol class="steps" id="step-bar">
+  <li class="step active" id="s-ind-1">Notice</li>
+  <li class="step" id="s-ind-2">Your details</li>
+  <li class="step" id="s-ind-3">Confirm</li>
+  <li class="step" id="s-ind-4">Done</li>
+ </ol>
+
+ <div id="loading"><p>Loading notice details…</p></div>
+
+ <!-- Step 1: Notice summary & amount -->
+ <div id="step1" class="step-panel" hidden>
+  <h1>Make a payment</h1>
+  <p>You are about to pay a Penalty Charge Notice.</p>
+  <dl class="details">
+   <dt>PCN number</dt><dd id="s1-pcn"></dd>
+   <dt>Vehicle registration</dt><dd id="s1-vrn"></dd>
+   <dt>Date of contravention</dt><dd id="s1-date"></dd>
+   <dt>Location</dt><dd id="s1-loc"></dd>
+   <dt>Contravention</dt><dd id="s1-con"></dd>
+   <dt>Amount due</dt><dd id="s1-amt" class="amount"></dd>
+  </dl>
+  <div class="info-box">
+   <b>Demo note:</b> The reduced (50%) penalty amount is shown if paid within 14 days.
+   No real money will be taken.
+  </div>
+  <div class="actions">
+   <button class="btn" onclick="goStep(2)">Continue</button>
+   <a class="btn secondary" id="cancel-link1" href="#">Cancel</a>
+  </div>
+ </div>
+
+ <!-- Step 2: Personal details -->
+ <div id="step2" class="step-panel" hidden>
+  <h1>Your details</h1>
+  <p>Please enter your details as they appear on the notice.</p>
+  <form id="details-form" class="grid" onsubmit="submitDetails(event)">
+   <div><label>First name *</label><input id="fname" required></div>
+   <div><label>Last name *</label><input id="lname" required></div>
+   <div class="full"><label>Address line 1 *</label><input id="addr1" required></div>
+   <div class="full"><label>Address line 2</label><input id="addr2"></div>
+   <div><label>Town / City *</label><input id="town" required></div>
+   <div><label>Postcode *</label><input id="postcode" required></div>
+   <div class="full"><label>Email address (for receipt)</label><input id="email" type="email"></div>
+   <div class="full actions">
+    <button class="btn" type="submit">Continue</button>
+    <button class="btn secondary" type="button" onclick="goStep(1)">Back</button>
+   </div>
+  </form>
+ </div>
+
+ <!-- Step 3: Confirm & pay -->
+ <div id="step3" class="step-panel" hidden>
+  <h1>Confirm payment</h1>
+  <h2>PCN details</h2>
+  <dl class="details">
+   <dt>PCN number</dt><dd id="s3-pcn"></dd>
+   <dt>Vehicle registration</dt><dd id="s3-vrn"></dd>
+   <dt>Amount to pay</dt><dd id="s3-amt" class="amount"></dd>
+  </dl>
+  <h2>Your details</h2>
+  <dl class="details">
+   <dt>Name</dt><dd id="s3-name"></dd>
+   <dt>Address</dt><dd id="s3-addr"></dd>
+  </dl>
+  <div class="info-box">
+   <b>This is a demo.</b> Clicking "Pay now" will NOT charge any card.
+   A fake confirmation will be shown.
+  </div>
+  <!-- Fake card input for realism -->
+  <h2>Card details</h2>
+  <div class="grid">
+   <div class="full"><label>Card number</label>
+    <input placeholder="•••• •••• •••• ••••" maxlength="19" oninput="fmtCard(this)"></div>
+   <div><label>Expiry (MM/YY)</label><input placeholder="MM/YY" maxlength="5"></div>
+   <div><label>CVV</label><input placeholder="•••" maxlength="4" type="password"></div>
+   <div class="full"><label>Name on card</label><input id="card-name"></div>
+  </div>
+  <div class="actions">
+   <button class="btn" onclick="goStep(4)">Pay now — <span id="s3-btn-amt"></span></button>
+   <button class="btn secondary" onclick="goStep(2)">Back</button>
+  </div>
+ </div>
+
+ <!-- Step 4: Confirmation -->
+ <div id="step4" class="step-panel" hidden>
+  <div class="success-box">
+   <div class="tick">✓</div>
+   <h1>Payment received</h1>
+   <p><b>Demo confirmation only — no real payment was taken.</b></p>
+  </div>
+  <dl class="details">
+   <dt>PCN number</dt><dd id="s4-pcn"></dd>
+   <dt>Amount paid</dt><dd id="s4-amt" class="amount"></dd>
+   <dt>Payment reference</dt><dd id="s4-ref"></dd>
+   <dt>Date</dt><dd id="s4-date"></dd>
+  </dl>
+  <p>A confirmation has been sent to your email address (demo only).</p>
+  <div class="actions">
+   <a class="btn" href="index.html">Return to PCN Search</a>
+  </div>
+ </div>
+
+</main>
+<footer>© 2026 Demo Parking Authority (fictional)</footer>
+<script>
+const esc = s => String(s ?? '').replace(/[&<>"]/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]));
+const q = new URLSearchParams(location.search);
+const vrn = q.get('vrn'), pcnNum = q.get('pcn');
+let record = null, amount = 0, fullName = '', fullAddr = '';
+
+// Set back link
+document.getElementById('back-link').href = `pcn.html?vrn=${encodeURIComponent(vrn)}&pcn=${encodeURIComponent(pcnNum)}`;
+document.getElementById('cancel-link1').href = `pcn.html?vrn=${encodeURIComponent(vrn)}&pcn=${encodeURIComponent(pcnNum)}`;
+
+fetch('/api/lookup', {method:'POST', headers:{'Content-Type':'application/json'},
+  body: JSON.stringify({vrn, pcn: pcnNum})})
+.then(async r => {
+  document.getElementById('loading').hidden = true;
+  if (!r.ok) { document.getElementById('loading').hidden = false;
+    document.getElementById('loading').innerHTML = '<p>Could not load PCN details. <a href="index.html">Return to search</a></p>'; return; }
+  record = await r.json();
+  // Calculate amount: 50% discount if date within 14 days, else full £70
+  const full = 70, reduced = 35;
+  const issued = record.date ? new Date(record.date) : null;
+  const daysSince = issued ? Math.floor((Date.now() - issued) / 86400000) : 99;
+  amount = daysSince <= 14 ? reduced : full;
+  const date = record.date ? record.date.split('-').reverse().join('/') : '—';
+  document.getElementById('s1-pcn').textContent = record.pcn;
+  document.getElementById('s1-vrn').textContent = record.vrn;
+  document.getElementById('s1-date').textContent = date;
+  document.getElementById('s1-loc').textContent = record.location || '—';
+  document.getElementById('s1-con').textContent = record.contravention || '—';
+  document.getElementById('s1-amt').textContent = `£${amount}.00`;
+  document.getElementById('s3-pcn').textContent = record.pcn;
+  document.getElementById('s3-vrn').textContent = record.vrn;
+  document.getElementById('s3-amt').textContent = `£${amount}.00`;
+  document.getElementById('s3-btn-amt').textContent = `£${amount}.00`;
+  document.getElementById('s4-pcn').textContent = record.pcn;
+  document.getElementById('s4-amt').textContent = `£${amount}.00`;
+  document.getElementById('s4-date').textContent = new Date().toLocaleDateString('en-GB');
+  document.getElementById('s4-ref').textContent = 'DPA-' + Math.random().toString(36).slice(2,10).toUpperCase();
+  goStep(1);
+});
+
+function goStep(n) {
+  [1,2,3,4].forEach(i => {
+    document.getElementById('step' + i).hidden = (i !== n);
+    document.getElementById('s-ind-' + i).className = 'step' + (i < n ? ' done' : i === n ? ' active' : '');
+  });
+}
+
+function submitDetails(e) {
+  e.preventDefault();
+  fullName = document.getElementById('fname').value + ' ' + document.getElementById('lname').value;
+  const parts = [document.getElementById('addr1').value, document.getElementById('addr2').value,
+    document.getElementById('town').value, document.getElementById('postcode').value].filter(Boolean);
+  fullAddr = parts.join(', ');
+  document.getElementById('s3-name').textContent = fullName;
+  document.getElementById('s3-addr').textContent = fullAddr;
+  goStep(3);
+}
+
+function fmtCard(el) {
+  el.value = el.value.replace(/\D/g,'').replace(/(.{4})/g,'$1 ').trim();
+}
+</script></body></html>

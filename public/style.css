@@ -1,155 +1,144 @@
 /* ── Reset & base ─────────────────────────────────────────── */
 *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
 body { font-family: Arial, Helvetica, sans-serif; font-size: 16px;
-       background: #f4f4f4; color: #222; min-height: 100vh;
+       background: #f3f2f1; color: #0b0c0c; min-height: 100vh;
        display: flex; flex-direction: column; }
-a { color: #005ea2; }
+a { color: #1d70b8; }
 a:hover { text-decoration: underline; }
 
 /* ── Demo banner ──────────────────────────────────────────── */
 .demo-banner {
-  background: #d4351c; color: #fff; text-align: center;
+  background: #f47738; color: #fff; text-align: center;
   padding: 6px 16px; font-size: 14px; font-weight: bold;
 }
 
 /* ── Header ───────────────────────────────────────────────── */
 header {
-  background: #1d3557; color: #fff;
+  background: #3d2375; color: #fff;
   padding: 16px 20px;
 }
 header .name { font-size: 22px; font-weight: bold; letter-spacing: 1px; }
 header .sub  { font-size: 13px; opacity: .85; margin-top: 2px; }
 
 /* ── Colour band ──────────────────────────────────────────── */
-.band { height: 6px; background: #f4a223; }
+.band { height: 6px; background: #3d2375; opacity: 0.3; }
 
 /* ── Main content ─────────────────────────────────────────── */
-main { flex: 1; max-width: 860px; width: 100%;
-       margin: 0 auto; padding: 24px 16px; }
+main { flex: 1; max-width: 960px; width: 100%;
+       margin: 0 auto; padding: 30px 20px; }
 
 /* ── Footer ───────────────────────────────────────────────── */
-footer { background: #222; color: #ccc; text-align: center;
-         padding: 12px; font-size: 13px; }
+footer { background: #0b0c0c; color: #fff; text-align: center;
+         padding: 14px; font-size: 14px; }
+footer a { color: #ddd; }
 
 /* ── Breadcrumbs ──────────────────────────────────────────── */
-.crumbs { font-size: 14px; margin-bottom: 20px; color: #555; }
-.crumbs a { color: #005ea2; text-decoration: none; }
+.crumbs { font-size: 14px; margin-bottom: 20px; color: #505a5f; }
+.crumbs a { color: #1d70b8; text-decoration: none; }
 .crumbs a:hover { text-decoration: underline; }
 
 /* ── Step indicator bar ───────────────────────────────────── */
 .steps {
   display: flex; list-style: none; gap: 0;
-  margin-bottom: 28px; border-radius: 4px; overflow: hidden;
-  border: 1px solid #ccc;
+  margin-bottom: 28px; border-radius: 0; overflow: hidden;
+  border-bottom: 2px solid #b1b4b6;
 }
 .step {
   flex: 1; text-align: center; padding: 10px 6px;
-  font-size: 13px; background: #f4f4f4; color: #666;
-  border-right: 1px solid #ccc; position: relative;
+  font-size: 13px; background: #f3f2f1; color: #505a5f;
+  border-right: 1px solid #b1b4b6; position: relative;
 }
 .step:last-child { border-right: none; }
-.step.active { background: #1d3557; color: #fff; font-weight: bold; }
-.step.done   { background: #005ea2; color: #fff; }
+.step.active { background: #3d2375; color: #fff; font-weight: bold; }
+.step.done   { background: #1d70b8; color: #fff; }
 
 /* ── Headings ─────────────────────────────────────────────── */
-h1 { font-size: 24px; margin-bottom: 12px; color: #1d3557; }
-h2 { font-size: 18px; margin: 20px 0 10px; color: #1d3557;
-     padding-bottom: 4px; border-bottom: 2px solid #f4a223; }
+h1 { font-size: 36px; font-weight: bold; margin-bottom: 20px; color: #0b0c0c; }
+h2 { font-size: 24px; font-weight: bold; margin: 24px 0 12px; color: #0b0c0c;
+     padding-bottom: 6px; border-bottom: 2px solid #b1b4b6; }
 
 /* ── Definition list ─────────────────────────────────────── */
-dl.details { display: grid; grid-template-columns: 200px 1fr;
-             gap: 6px 12px; margin-bottom: 20px; }
-dt { font-weight: bold; color: #444; }
-dd { color: #222; }
-dd.amount { font-size: 20px; font-weight: bold; color: #005ea2; }
-@media (max-width: 520px) {
-  dl.details { grid-template-columns: 1fr; }
-  dt { margin-top: 8px; }
-}
+dl.details { margin-bottom: 24px; }
+dt { font-weight: bold; color: #0b0c0c; padding: 8px 0 2px; font-size: 14px; }
+dd { color: #0b0c0c; padding-bottom: 8px;
+     border-bottom: 1px solid #b1b4b6; font-size: 16px; }
+dd.amount { font-size: 22px; font-weight: bold; color: #3d2375; }
 
-/* ── Grid form ────────────────────────────────────────────── */
-.grid { display: grid; grid-template-columns: 1fr 1fr; gap: 14px; }
+/* ── Form rows ────────────────────────────────────────────── */
+.row { display: flex; flex-direction: column; margin-bottom: 20px; max-width: 500px; }
+.grid { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; }
 .grid .full { grid-column: 1 / -1; }
 @media (max-width: 520px) { .grid { grid-template-columns: 1fr; } }
-label { display: block; font-size: 14px; font-weight: bold;
-        margin-bottom: 4px; color: #333; }
+label { display: block; font-size: 16px; font-weight: bold;
+        margin-bottom: 5px; color: #0b0c0c; }
 input, textarea, select {
-  width: 100%; padding: 8px 10px; border: 1px solid #aaa;
-  border-radius: 3px; font-size: 15px; font-family: inherit;
+  width: 100%; padding: 8px 10px; border: 2px solid #0b0c0c;
+  border-radius: 0; font-size: 16px; font-family: inherit;
+  background: #fff;
 }
-input:focus, textarea:focus { outline: 2px solid #005ea2; border-color: #005ea2; }
+input:focus, textarea:focus { outline: 3px solid #fd0; outline-offset: 0; border-color: #0b0c0c; }
 textarea { resize: vertical; }
 
 /* ── Buttons ──────────────────────────────────────────────── */
 .btn {
-  display: inline-block; padding: 10px 22px;
-  background: #1d3557; color: #fff; border: none;
-  border-radius: 3px; font-size: 15px; font-weight: bold;
+  display: inline-block; padding: 10px 18px;
+  background: #3d2375; color: #fff; border: 2px solid #3d2375;
+  font-size: 16px; font-weight: bold;
   cursor: pointer; text-decoration: none; font-family: inherit;
+  border-radius: 0;
 }
-.btn:hover { background: #162a42; color: #fff; }
-.btn.secondary { background: #505a5f; }
-.btn.secondary:hover { background: #383f43; }
-.btn.small { padding: 6px 14px; font-size: 13px; }
-.btn.danger { background: #d4351c; }
-.btn.danger:hover { background: #aa2515; }
+.btn:hover { background: #2e1860; border-color: #2e1860; color: #fff; }
+.btn.secondary { background: #fff; color: #3d2375; border-color: #3d2375; }
+.btn.secondary:hover { background: #f3f2f1; }
+.btn.small { padding: 6px 12px; font-size: 14px; }
+.btn.danger { background: #d4351c; border-color: #d4351c; color: #fff; }
+.btn.danger:hover { background: #aa2515; border-color: #aa2515; }
 
 /* ── Actions row ──────────────────────────────────────────── */
-.actions { display: flex; gap: 10px; flex-wrap: wrap;
-           margin-top: 20px; align-items: center; }
+.actions { display: flex; gap: 12px; flex-wrap: wrap;
+           margin-top: 24px; align-items: center; }
 
 /* ── Info / notice box ────────────────────────────────────── */
 .info-box {
-  background: #fff8e1; border-left: 4px solid #f4a223;
-  padding: 12px 14px; margin: 16px 0; font-size: 14px;
-  border-radius: 0 3px 3px 0;
+  background: #fff7bf; border-left: 6px solid #ffdd00;
+  padding: 15px; margin: 16px 0; font-size: 16px;
 }
 
 /* ── Error text ───────────────────────────────────────────── */
-.err { color: #d4351c; font-weight: bold; margin-top: 8px; font-size: 14px; }
+.err { color: #d4351c; font-weight: bold; margin-top: 6px; font-size: 16px; }
 
-/* ── Panel (evidence / statement display) ─────────────────── */
+/* ── Panel ────────────────────────────────────────────────── */
 .panel {
-  background: #fff; border: 1px solid #ccc; border-radius: 3px;
+  background: #fff; border: 1px solid #b1b4b6;
   padding: 14px; margin-top: 10px; white-space: pre-wrap;
-  font-size: 14px; line-height: 1.5;
+  font-size: 16px; line-height: 1.5;
 }
 
-/* ── Check list (appeal grounds) ─────────────────────────── */
-.check-list { display: flex; flex-direction: column; gap: 10px;
-              margin-bottom: 20px; }
+/* ── Check list ───────────────────────────────────────────── */
+.check-list { display: flex; flex-direction: column; gap: 8px; margin-bottom: 20px; }
 .check-list label {
   display: flex; align-items: flex-start; gap: 10px;
-  font-weight: normal; font-size: 15px; cursor: pointer;
-  padding: 10px 12px; background: #fff; border: 1px solid #ccc;
-  border-radius: 3px;
+  font-weight: normal; font-size: 16px; cursor: pointer;
+  padding: 10px; background: #fff; border: 1px solid #b1b4b6;
 }
-.check-list label:hover { border-color: #005ea2; background: #f0f4f8; }
+.check-list label:hover { border-color: #3d2375; background: #f3f2f1; }
 .check-list input[type="checkbox"] {
-  width: 18px; height: 18px; flex-shrink: 0; margin-top: 1px; cursor: pointer;
+  width: 20px; height: 20px; flex-shrink: 0; margin-top: 2px; cursor: pointer;
+  accent-color: #3d2375;
 }
 
-/* ── Success confirmation box ─────────────────────────────── */
+/* ── Success box ──────────────────────────────────────────── */
 .success-box {
-  background: #00703c; color: #fff; border-radius: 4px;
+  background: #00703c; color: #fff;
   padding: 24px 20px; text-align: center; margin-bottom: 24px;
 }
-.success-box .tick {
-  font-size: 48px; line-height: 1; margin-bottom: 10px;
-}
-.success-box h1 { color: #fff; margin-bottom: 8px; }
-.success-box p  { font-size: 14px; opacity: .9; }
+.success-box .tick { font-size: 48px; margin-bottom: 10px; }
+.success-box h1 { color: #fff; font-size: 28px; margin-bottom: 8px; }
+.success-box p  { font-size: 16px; opacity: .9; }
 
 /* ── Table ────────────────────────────────────────────────── */
 table { width: 100%; border-collapse: collapse; margin-top: 24px;
-        background: #fff; font-size: 14px; }
-th { background: #1d3557; color: #fff; padding: 10px 8px;
-     text-align: left; }
-td { padding: 8px; border-bottom: 1px solid #ddd; }
-tr:hover td { background: #f0f4f8; }
-
-/* ── Search form on index ─────────────────────────────────── */
-.search-box {
-  background: #fff; border: 1px solid #ccc; border-radius: 4px;
-  padding: 24px; max-width: 480px;
-}
+        background: #fff; font-size: 16px; }
+th { background: #3d2375; color: #fff; padding: 10px 8px; text-align: left; }
+td { padding: 10px 8px; border-bottom: 1px solid #b1b4b6; }
+tr:hover td { background: #f3f2f1; }

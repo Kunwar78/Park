@@ -11,14 +11,17 @@
 <footer>© 2026 Demo Parking Authority (fictional)</footer>
 <script>
 const q = new URLSearchParams(location.search);
+const vrn = q.get('vrn'), pcn = q.get('pcn');
 const esc = s => String(s ?? '').replace(/[&<>"]/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]));
 fetch('/api/lookup', {method:'POST', headers:{'Content-Type':'application/json'},
-  body: JSON.stringify({vrn:q.get('vrn'), pcn:q.get('pcn')})})
+  body: JSON.stringify({vrn, pcn})})
 .then(async r => {
   const out = document.getElementById('out');
   if (!r.ok) { out.innerHTML = '<h1>Not found</h1><p>No matching record.</p>'; return; }
   const d = await r.json();
   const date = d.date ? d.date.split('-').reverse().join('/') : '';
+  // Build query string to pass to sub-pages
+  const qs = `vrn=${encodeURIComponent(d.vrn)}&pcn=${encodeURIComponent(d.pcn)}`;
   out.innerHTML = `
    <h1>Penalty Charge Notice ${esc(d.pcn)}</h1>
    <h2>PCN details</h2>
@@ -33,11 +36,11 @@ fetch('/api/lookup', {method:'POST', headers:{'Content-Type':'application/json'}
     <dt>Contravention</dt><dd>${esc(d.contravention)}</dd>
    </dl>
    <div class="actions">
-    <button class="btn" onclick="alert('Demo only: no payment is taken.')">Payment</button>
-    <button class="btn" onclick="alert('Demo only: no appeal is submitted.')">Appeal</button>
+    <a class="btn" href="payment.html?${qs}">Make a payment</a>
+    <a class="btn secondary" href="appeal.html?${qs}">Appeal this PCN</a>
    </div>
    ${d.additional ? `<h2>Additional details</h2><p>Additional information is available for this demo notice.</p>
-   <button class="btn" onclick="document.getElementById('ev').hidden=!document.getElementById('ev').hidden">View evidence</button>
+   <button class="btn small" onclick="document.getElementById('ev').hidden=!document.getElementById('ev').hidden">View evidence</button>
    <div class="panel" id="ev" hidden>${esc(d.additional)}</div>` : ''}`;
 });
 </script></body></html>

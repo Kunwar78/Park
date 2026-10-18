@@ -109,9 +109,9 @@ button.search-btn:hover { background: var(--purple-dark); }
 
 /* ── Definition list ── */
 dl.details { margin-bottom: 24px; display: grid; grid-template-columns: auto 1fr; gap: 0; }
-dt { font-weight: bold; color: var(--text); padding: 10px 20px 10px 0; font-size: 15px;
-     border-bottom: 1px solid var(--border); white-space: nowrap; }
-dd { color: var(--text); padding: 10px 0; border-bottom: 1px solid var(--border); font-size: 15px; margin: 0; }
+dt { font-weight: normal; color: var(--text); padding: 6px 40px 6px 0; font-size: 15px;
+     border: none; white-space: nowrap; }
+dd { color: var(--text); padding: 6px 0; border: none; font-size: 15px; margin: 0; }
 dd.amount { font-size: 22px; font-weight: 300; color: var(--purple); }
 
 /* ── Breadcrumbs ── */

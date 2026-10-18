@@ -45,9 +45,10 @@ header.site-header {
 main { flex: 1; max-width: 900px; margin: 0 auto; padding: 40px 24px 80px; width: 100%; }
 
 /* ── Headings ── */
-h1 { color: var(--purple); font-weight: 400; font-size: 2rem; margin: 0 0 20px; }
+h1 { color: var(--purple); font-weight: 300; font-size: 2.4rem; margin: 0 0 20px; letter-spacing: -0.5px; }
 h1 u, h2 u { text-decoration-style: dotted; }
-h2 { color: var(--purple); font-weight: 400; font-size: 1.4rem; margin: 36px 0 20px; }
+h2 { color: var(--purple); font-weight: 300; font-size: 1.6rem; margin: 36px 0 20px; }
+h3 { color: var(--purple); font-weight: 300; font-size: 1.2rem; margin: 20px 0 10px; }
 
 /* ── Lead paragraph ── */
 p.lead { font-size: 1.05rem; margin-bottom: 28px; }
@@ -107,10 +108,11 @@ button.search-btn:hover { background: var(--purple-dark); }
 .step.done   { background: #2f6fb3; color: #fff; }
 
 /* ── Definition list ── */
-dl.details { margin-bottom: 24px; }
-dt { font-weight: bold; color: var(--muted); padding: 8px 0 2px; font-size: 14px; }
-dd { color: var(--text); padding-bottom: 8px; border-bottom: 1px solid var(--border); font-size: 16px; }
-dd.amount { font-size: 22px; font-weight: bold; color: var(--purple); }
+dl.details { margin-bottom: 24px; display: grid; grid-template-columns: auto 1fr; gap: 0; }
+dt { font-weight: bold; color: var(--text); padding: 10px 20px 10px 0; font-size: 15px;
+     border-bottom: 1px solid var(--border); white-space: nowrap; }
+dd { color: var(--text); padding: 10px 0; border-bottom: 1px solid var(--border); font-size: 15px; margin: 0; }
+dd.amount { font-size: 22px; font-weight: 300; color: var(--purple); }
 
 /* ── Breadcrumbs ── */
 .crumbs { font-size: 14px; margin-bottom: 20px; color: var(--muted); }
@@ -179,7 +181,7 @@ textarea { resize: vertical; }
   padding: 24px 20px; text-align: center; margin-bottom: 24px;
 }
 .success-box .tick { font-size: 48px; margin-bottom: 10px; }
-.success-box h1 { color: #fff; font-size: 28px; margin-bottom: 8px; font-weight: bold; }
+.success-box h1 { color: #fff; font-size: 2rem; margin-bottom: 8px; font-weight: 300; }
 .success-box p  { font-size: 16px; opacity: .9; }
 
 /* ── Sub-page actions ── */

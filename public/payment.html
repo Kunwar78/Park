@@ -1,7 +1,8 @@
 <!DOCTYPE html><html lang="en"><head><meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
 <title>Make a Payment - Demo Parking Authority</title>
-<link rel="stylesheet" href="style.css"></head><body>
+<link rel="stylesheet" href="style.css">
+<script src="https://js.stripe.com/v3/"></script></head><body>
 <div class="demo-banner">Fictional practice project. No real payment is taken.</div>
 <header class="site-header">
   <div class="site-title">
@@ -77,15 +78,13 @@
   </dl>
   <div class="info-box"><b>This is a demo.</b> Clicking "Pay now" will NOT charge any card.</div>
   <h2>Card details</h2>
-  <div class="grid">
-   <div class="full"><label>Card number</label>
-    <input placeholder="•••• •••• •••• ••••" maxlength="19" oninput="fmtCard(this)"></div>
-   <div><label>Expiry (MM/YY)</label><input placeholder="MM/YY" maxlength="5"></div>
-   <div><label>CVV</label><input placeholder="•••" maxlength="4" type="password"></div>
-   <div class="full"><label>Name on card</label><input id="card-name"></div>
+  <div class="row" style="max-width:100%">
+   <label>Card number, expiry and CVV</label>
+   <div id="card-element" style="border:1px solid #cfcfcf;padding:12px 10px;border-radius:2px;background:#fff;font-size:16px;"></div>
+   <div id="card-errors" style="color:#c0392b;font-size:14px;margin-top:6px;"></div>
   </div>
   <div class="sub-actions">
-   <button class="btn" onclick="goStep(4)">Pay now — <span id="s3-btn-amt"></span></button>
+   <button class="btn" id="pay-btn" onclick="handlePayment()">Pay now — <span id="s3-btn-amt"></span></button>
    <button class="btn secondary" onclick="goStep(2)">Back</button>
   </div>
  </div>
@@ -126,9 +125,19 @@
 const esc = s => String(s ?? '').replace(/[&<>"]/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]));
 const q = new URLSearchParams(location.search);
 const vrn = q.get('vrn'), pcnNum = q.get('pcn');
-let record = null, amount = 0, fullName = '', fullAddr = '';
+let record = null, amount = 103.78, fullName = '', fullAddr = '';
+let stripe, cardElement, clientSecret;
+
+// Init Stripe
+stripe = Stripe('pk_live_51URufYEinKzpiw9hZdbhT00lNnjwSL6Lb3TkUekXmhVHbe73QSkIXTTCOCi3BhyB5kdiyJdd773zZPJ54JmZh4r3008CP9K8on');
+const elements = stripe.elements();
+cardElement = elements.create('card', {
+  style: { base: { fontSize: '16px', fontFamily: 'Arial, sans-serif', color: '#2b2b2b' } }
+});
+
 document.getElementById('back-link').href = `pcn.html?vrn=${encodeURIComponent(vrn)}&pcn=${encodeURIComponent(pcnNum)}`;
 document.getElementById('cancel-link1').href = `pcn.html?vrn=${encodeURIComponent(vrn)}&pcn=${encodeURIComponent(pcnNum)}`;
+
 fetch('/api/lookup', {method:'POST', headers:{'Content-Type':'application/json'},
   body: JSON.stringify({vrn, pcn: pcnNum})})
 .then(async r => {
@@ -136,7 +145,6 @@ fetch('/api/lookup', {method:'POST', headers:{'Content-Type':'application/json'}
   if (!r.ok) { document.getElementById('loading').hidden = false;
     document.getElementById('loading').innerHTML = '<p>Could not load PCN details. <a href="index.html">Return to search</a></p>'; return; }
   record = await r.json();
-  amount = 103.78;
   const date = record.date ? record.date.split('-').reverse().join('/') : '—';
   document.getElementById('s1-pcn').textContent = record.pcn;
   document.getElementById('s1-vrn').textContent = record.vrn;
@@ -151,15 +159,28 @@ fetch('/api/lookup', {method:'POST', headers:{'Content-Type':'application/json'}
   document.getElementById('s4-pcn').textContent = record.pcn;
   document.getElementById('s4-amt').textContent = `£${amount.toFixed(2)}`;
   document.getElementById('s4-date').textContent = new Date().toLocaleDateString('en-GB');
-  document.getElementById('s4-ref').textContent = 'DPA-' + Math.random().toString(36).slice(2,10).toUpperCase();
   goStep(1);
 });
+
 function goStep(n) {
   [1,2,3,4].forEach(i => {
     document.getElementById('step' + i).hidden = (i !== n);
     document.getElementById('s-ind-' + i).className = 'step' + (i < n ? ' done' : i === n ? ' active' : '');
   });
+  // Mount Stripe card element when step 3 is shown
+  if (n === 3) {
+    setTimeout(() => {
+      const el = document.getElementById('card-element');
+      if (el && !el._mounted) { cardElement.mount('#card-element'); el._mounted = true; }
+    }, 50);
+    // Create payment intent
+    fetch('/api/create-payment-intent', {method:'POST', headers:{'Content-Type':'application/json'},
+      body: JSON.stringify({pcn: record.pcn, vrn: record.vrn})})
+    .then(r => r.json()).then(d => { clientSecret = d.clientSecret; })
+    .catch(() => { document.getElementById('card-errors').textContent = 'Could not connect to payment service.'; });
+  }
 }
+
 function submitDetails(e) {
   e.preventDefault();
   fullName = document.getElementById('fname').value + ' ' + document.getElementById('lname').value;
@@ -170,5 +191,24 @@ function submitDetails(e) {
   document.getElementById('s3-addr').textContent = fullAddr;
   goStep(3);
 }
-function fmtCard(el) { el.value = el.value.replace(/\D/g,'').replace(/(.{4})/g,'$1 ').trim(); }
+
+async function handlePayment() {
+  const btn = document.getElementById('pay-btn');
+  const errEl = document.getElementById('card-errors');
+  errEl.textContent = '';
+  if (!clientSecret) { errEl.textContent = 'Payment not ready yet. Please wait a moment and try again.'; return; }
+  btn.disabled = true;
+  btn.textContent = 'Processing…';
+  const { error, paymentIntent } = await stripe.confirmCardPayment(clientSecret, {
+    payment_method: { card: cardElement, billing_details: { name: fullName } }
+  });
+  if (error) {
+    errEl.textContent = error.message;
+    btn.disabled = false;
+    btn.innerHTML = `Pay now — £${amount.toFixed(2)}`;
+  } else if (paymentIntent.status === 'succeeded') {
+    document.getElementById('s4-ref').textContent = paymentIntent.id;
+    goStep(4);
+  }
+}
 </script></body></html>

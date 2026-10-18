@@ -1,28 +1,103 @@
 <!DOCTYPE html><html lang="en"><head><meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
-<title>PCN Search - Demo Parking Authority</title><link rel="stylesheet" href="style.css"></head><body>
+<title>PCN Search - Demo Parking Authority</title>
+<link rel="stylesheet" href="style.css"></head><body>
 <div class="demo-banner">Fictional practice project. Not a real authority. No real fines or payments.</div>
-<header><div class="name">DEMO PARKING AUTHORITY</div><div class="sub">STUDY PROJECT</div></header>
+<header class="site-header">
+  <div class="site-title">
+    <div class="name">DEMO PARKING AUTHORITY</div>
+    <div class="sub">STUDY PROJECT</div>
+  </div>
+</header>
 <div class="band"></div>
 <main>
- <h1>PCN Details</h1>
- <p>Enter the details exactly as printed on your demo notice.</p>
- <form id="f" autocomplete="off">
-  <div class="row"><label for="vrn">Vehicle Registration Number *</label><input id="vrn"></div>
-  <div class="row"><label for="pcn">Penalty Charge Notice (PCN) *</label><input id="pcn"></div>
-  <div class="err" id="err"></div>
-  <div class="row" style="justify-content:flex-end"><button class="btn">Search</button></div>
- </form>
+  <h1><u>PCN</u> Details</h1>
+  <p class="lead">You can use this site to pay for a Penalty Charge Notice (PCN) and to view information about the contravention.</p>
+
+  <div class="notice">
+    <div class="icon"><span>i</span></div>
+    <div>Please enter the required information as printed on your Penalty Charge Notice.</div>
+  </div>
+  <div class="notice">
+    <div class="icon"><span>i</span></div>
+    <div>Fields marked with <span class="req">*</span> must be entered.</div>
+  </div>
+
+  <h2><u>PCN</u> details</h2>
+
+  <form id="pcnForm" autocomplete="off">
+    <div class="field-row">
+      <label for="vrn">Vehicle Registration Number <span class="req">*</span></label>
+      <input type="text" id="vrn" name="vrn" maxlength="12">
+    </div>
+    <div class="error-text" id="vrnError">Please enter a vehicle registration number.</div>
+    <div class="field-row">
+      <label for="pcn">Penalty Charge Notice (PCN) <span class="req">*</span></label>
+      <input type="text" id="pcn" name="pcn" maxlength="20">
+    </div>
+    <div class="error-text" id="pcnError">Please enter a PCN number.</div>
+    <div class="actions">
+      <button type="submit" class="search-btn">Search</button>
+    </div>
+  </form>
+  <div class="err" id="err" style="margin-top:16px;max-width:620px;text-align:right"></div>
 </main>
-<footer>© 2026 Demo Parking Authority (fictional) · <a href="admin.html" style="color:#ddd">Admin</a></footer>
+
+<footer class="site-footer">
+  <div class="footer-cols">
+    <div>
+      <h4>Site details</h4>
+      <ul>
+        <li>Homepage</li>
+        <li>Contact us</li>
+        <li>Website help</li>
+        <li>Privacy and cookies</li>
+      </ul>
+    </div>
+    <div>
+      <h4>Quick links</h4>
+      <ul>
+        <li>Pay a PCN</li>
+        <li>Appeal a PCN</li>
+        <li>PCN Search</li>
+      </ul>
+    </div>
+    <div>
+      <h4>Connect</h4>
+      <ul>
+        <li>Stay connected</li>
+        <li>Provide feedback</li>
+      </ul>
+    </div>
+  </div>
+  <div class="footer-bottom">
+    <span>© 2026 Demo Parking Authority (fictional)</span>
+    <strong><a href="admin.html">Admin</a></strong>
+  </div>
+</footer>
+
 <script>
-document.getElementById('f').addEventListener('submit', async e => {
+const form = document.getElementById('pcnForm');
+const vrnInput = document.getElementById('vrn');
+const pcnInput = document.getElementById('pcn');
+const vrnError = document.getElementById('vrnError');
+const pcnError = document.getElementById('pcnError');
+const err = document.getElementById('err');
+
+form.addEventListener('submit', async function(e) {
   e.preventDefault();
-  const vrn = vrn_.value.trim(), pcn = pcn_.value.trim(), err = document.getElementById('err');
-  if (!vrn || !pcn) { err.textContent = 'Please enter both fields.'; return; }
-  const r = await fetch('/api/lookup', {method:'POST', headers:{'Content-Type':'application/json'}, body:JSON.stringify({vrn,pcn})});
-  if (!r.ok) { err.textContent = 'No matching record found.'; return; }
+  let valid = true;
+  if (!vrnInput.value.trim()) { vrnError.classList.add('show'); valid = false; }
+  else vrnError.classList.remove('show');
+  if (!pcnInput.value.trim()) { pcnError.classList.add('show'); valid = false; }
+  else pcnError.classList.remove('show');
+  if (!valid) return;
+  err.textContent = '';
+  const vrn = vrnInput.value.trim().toUpperCase();
+  const pcn = pcnInput.value.trim().toUpperCase();
+  const r = await fetch('/api/lookup', {method:'POST',
+    headers:{'Content-Type':'application/json'}, body: JSON.stringify({vrn, pcn})});
+  if (!r.ok) { err.textContent = 'No matching record found. Please check your details.'; return; }
   location.href = 'pcn.html?vrn=' + encodeURIComponent(vrn) + '&pcn=' + encodeURIComponent(pcn);
 });
-const vrn_ = document.getElementById('vrn'), pcn_ = document.getElementById('pcn');
 </script></body></html>

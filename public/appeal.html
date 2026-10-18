@@ -1,8 +1,14 @@
 <!DOCTYPE html><html lang="en"><head><meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
-<title>Appeal PCN - Demo Parking Authority</title><link rel="stylesheet" href="style.css"></head><body>
+<title>Appeal PCN - Demo Parking Authority</title>
+<link rel="stylesheet" href="style.css"></head><body>
 <div class="demo-banner">Fictional practice project. No real appeal is submitted.</div>
-<header><div class="name">DEMO PARKING AUTHORITY</div><div class="sub">APPEAL A PCN</div></header>
+<header class="site-header">
+  <div class="site-title">
+    <div class="name">DEMO PARKING AUTHORITY</div>
+    <div class="sub">APPEAL A PCN</div>
+  </div>
+</header>
 <div class="band"></div>
 <main>
  <div class="crumbs">
@@ -21,10 +27,9 @@
 
  <div id="loading"><p>Loading notice details…</p></div>
 
- <!-- Step 1: PCN summary -->
  <div id="step1" class="step-panel" hidden>
   <h1>Appeal a Penalty Charge Notice</h1>
-  <p>Before you appeal, check the details of your PCN are correct.</p>
+  <p class="lead">Before you appeal, check the details of your PCN are correct.</p>
   <dl class="details">
    <dt>PCN number</dt><dd id="s1-pcn"></dd>
    <dt>Vehicle registration</dt><dd id="s1-vrn"></dd>
@@ -32,20 +37,16 @@
    <dt>Location</dt><dd id="s1-loc"></dd>
    <dt>Contravention</dt><dd id="s1-con"></dd>
   </dl>
-  <div class="info-box">
-   <b>Important (demo info):</b> In a real case, submitting an appeal pauses the payment
-   deadline while the authority considers your case.
-  </div>
-  <div class="actions">
+  <div class="info-box"><b>Important (demo info):</b> In a real case, submitting an appeal pauses the payment deadline while the authority considers your case.</div>
+  <div class="sub-actions">
    <button class="btn" onclick="goStep(2)">Continue to appeal</button>
    <a class="btn secondary" id="cancel-link" href="#">Cancel</a>
   </div>
  </div>
 
- <!-- Step 2: Grounds -->
  <div id="step2" class="step-panel" hidden>
   <h1>Select your grounds for appeal</h1>
-  <p>Choose one or more reasons that apply to your case.</p>
+  <p class="lead">Choose one or more reasons that apply to your case.</p>
   <form id="grounds-form" onsubmit="submitGrounds(event)">
    <div class="check-list">
     <label><input type="checkbox" name="g" value="owner"> I was not the owner/keeper of the vehicle at the time</label>
@@ -58,46 +59,35 @@
     <label><input type="checkbox" name="g" value="other"> Other reason (explain in next step)</label>
    </div>
    <div id="grounds-err" class="err" hidden>Please select at least one reason.</div>
-   <div class="actions">
+   <div class="sub-actions">
     <button class="btn" type="submit">Continue</button>
     <button class="btn secondary" type="button" onclick="goStep(1)">Back</button>
    </div>
   </form>
  </div>
 
- <!-- Step 3: Written statement -->
  <div id="step3" class="step-panel" hidden>
   <h1>Your statement</h1>
-  <p>Please explain your appeal in your own words. Include any relevant dates, times, or evidence you have.</p>
+  <p class="lead">Please explain your appeal in your own words.</p>
   <div id="grounds-summary" class="info-box"></div>
   <form id="statement-form" onsubmit="submitStatement(event)">
-   <div class="full">
+   <div class="row" style="max-width:100%">
     <label>Your statement *</label>
     <textarea id="statement" rows="8" required placeholder="Explain why you are appealing this PCN…"></textarea>
    </div>
-   <div class="full">
-    <label>Your name *</label>
-    <input id="ap-name" required>
-   </div>
-   <div class="full">
-    <label>Your email address *</label>
-    <input id="ap-email" type="email" required>
-   </div>
-   <div class="info-box">
-    <b>Demo only:</b> No files will actually be uploaded in this practice project.
-    In a real system you could attach supporting evidence here.
-   </div>
-   <div class="actions">
+   <div class="row"><label>Your name *</label><input id="ap-name" required></div>
+   <div class="row"><label>Your email address *</label><input id="ap-email" type="email" required></div>
+   <div class="info-box"><b>Demo only:</b> No files will be uploaded in this practice project.</div>
+   <div class="sub-actions">
     <button class="btn" type="submit">Continue</button>
     <button class="btn secondary" type="button" onclick="goStep(2)">Back</button>
    </div>
   </form>
  </div>
 
- <!-- Step 4: Review -->
  <div id="step4" class="step-panel" hidden>
   <h1>Review your appeal</h1>
-  <p>Please check everything before you submit.</p>
+  <p class="lead">Please check everything before you submit.</p>
   <h2>PCN</h2>
   <dl class="details">
    <dt>PCN number</dt><dd id="s4-pcn"></dd>
@@ -112,16 +102,13 @@
    <dt>Name</dt><dd id="s4-name"></dd>
    <dt>Email</dt><dd id="s4-email"></dd>
   </dl>
-  <div class="info-box">
-   <b>Demo only — clicking Submit will not send any real appeal.</b>
-  </div>
-  <div class="actions">
+  <div class="info-box"><b>Demo only — clicking Submit will not send any real appeal.</b></div>
+  <div class="sub-actions">
    <button class="btn" onclick="goStep(5)">Submit appeal</button>
    <button class="btn secondary" onclick="goStep(3)">Back</button>
   </div>
  </div>
 
- <!-- Step 5: Submitted -->
  <div id="step5" class="step-panel" hidden>
   <div class="success-box">
    <div class="tick">✓</div>
@@ -133,31 +120,34 @@
    <dt>Appeal reference</dt><dd id="s5-ref"></dd>
    <dt>Submitted on</dt><dd id="s5-date"></dd>
   </dl>
-  <p>In a real case the authority would acknowledge your appeal within 3 working days.
-  You will be notified of the outcome by email.</p>
-  <div class="actions">
-   <a class="btn" href="index.html">Return to PCN Search</a>
-  </div>
+  <p>In a real case the authority would acknowledge your appeal within 3 working days.</p>
+  <div class="sub-actions"><a class="btn" href="index.html">Return to PCN Search</a></div>
  </div>
-
 </main>
-<footer>© 2026 Demo Parking Authority (fictional)</footer>
+
+<footer class="site-footer">
+  <div class="footer-cols">
+    <div><h4>Site details</h4><ul><li>Homepage</li><li>Contact us</li><li>Privacy and cookies</li></ul></div>
+    <div><h4>Quick links</h4><ul><li>Pay a PCN</li><li>Appeal a PCN</li><li>PCN Search</li></ul></div>
+  </div>
+  <div class="footer-bottom">
+    <span>© 2026 Demo Parking Authority (fictional)</span>
+    <strong><a href="admin.html">Admin</a></strong>
+  </div>
+</footer>
 <script>
 const esc = s => String(s ?? '').replace(/[&<>"]/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]));
 const q = new URLSearchParams(location.search);
 const vrn = q.get('vrn'), pcnNum = q.get('pcn');
 let record = null, selectedGrounds = [], statementText = '', apName = '', apEmail = '';
-
 const groundLabels = {
   owner:'Not the owner/keeper at the time', hired:'Vehicle was hired',
   stolen:'Vehicle was stolen', paid:'Parking charges were paid',
   signs:'Inadequate or missing signs/markings', blue:'Blue Badge displayed',
   error:'Error on the PCN', other:'Other reason'
 };
-
 document.getElementById('back-link').href = `pcn.html?vrn=${encodeURIComponent(vrn)}&pcn=${encodeURIComponent(pcnNum)}`;
 document.getElementById('cancel-link').href = `pcn.html?vrn=${encodeURIComponent(vrn)}&pcn=${encodeURIComponent(pcnNum)}`;
-
 fetch('/api/lookup', {method:'POST', headers:{'Content-Type':'application/json'},
   body: JSON.stringify({vrn, pcn: pcnNum})})
 .then(async r => {
@@ -178,25 +168,21 @@ fetch('/api/lookup', {method:'POST', headers:{'Content-Type':'application/json'}
   document.getElementById('s5-date').textContent = new Date().toLocaleDateString('en-GB');
   goStep(1);
 });
-
 function goStep(n) {
   [1,2,3,4,5].forEach(i => {
     document.getElementById('step' + i).hidden = (i !== n);
     document.getElementById('s-ind-' + i).className = 'step' + (i < n ? ' done' : i === n ? ' active' : '');
   });
 }
-
 function submitGrounds(e) {
   e.preventDefault();
   const checked = [...document.querySelectorAll('[name="g"]:checked')].map(c => c.value);
   if (!checked.length) { document.getElementById('grounds-err').hidden = false; return; }
   document.getElementById('grounds-err').hidden = true;
   selectedGrounds = checked;
-  const labels = checked.map(v => '• ' + (groundLabels[v] || v)).join('<br>');
-  document.getElementById('grounds-summary').innerHTML = '<b>Selected grounds:</b><br>' + labels;
+  document.getElementById('grounds-summary').innerHTML = '<b>Selected grounds:</b><br>' + checked.map(v => '• ' + (groundLabels[v] || v)).join('<br>');
   goStep(3);
 }
-
 function submitStatement(e) {
   e.preventDefault();
   statementText = document.getElementById('statement').value;

@@ -2,10 +2,12 @@
 const http = require('http');
 const fs = require('fs');
 const path = require('path');
+const https = require('https');
 
 const PORT = process.env.PORT || 3000;
 const ADMIN_USER = process.env.ADMIN_USER || 'admin';
 const ADMIN_PASS = process.env.ADMIN_PASS || 'admin123';
+const STRIPE_SECRET_KEY = process.env.STRIPE_SECRET_KEY || '';
 const DATA_FILE = path.join(process.env.DATA_DIR || __dirname, 'data.json');
 const PUBLIC = path.join(__dirname, 'public');
 
@@ -27,7 +29,7 @@ function load() {
 const save = rows => fs.writeFileSync(DATA_FILE, JSON.stringify(rows, null, 2));
 
 function send(res, code, body, type = 'application/json') {
-  res.writeHead(code, { 'Content-Type': type });
+  res.writeHead(code, { 'Content-Type': type, 'Access-Control-Allow-Origin': '*' });
   res.end(type === 'application/json' ? JSON.stringify(body) : body);
 }
 function readBody(req) {
@@ -49,6 +51,31 @@ function clean(body) {
   return r;
 }
 
+// Call Stripe API using built-in https (no npm needed)
+function stripeRequest(method, endpoint, data) {
+  return new Promise((resolve, reject) => {
+    const body = new URLSearchParams(data).toString();
+    const options = {
+      hostname: 'api.stripe.com',
+      path: endpoint,
+      method,
+      headers: {
+        'Authorization': `Bearer ${STRIPE_SECRET_KEY}`,
+        'Content-Type': 'application/x-www-form-urlencoded',
+        'Content-Length': Buffer.byteLength(body)
+      }
+    };
+    const req = https.request(options, res => {
+      let s = '';
+      res.on('data', c => s += c);
+      res.on('end', () => { try { resolve(JSON.parse(s)); } catch (e) { reject(e); } });
+    });
+    req.on('error', reject);
+    req.write(body);
+    req.end();
+  });
+}
+
 const MIME = { '.html': 'text/html', '.css': 'text/css', '.js': 'text/javascript' };
 
 http.createServer(async (req, res) => {
@@ -60,6 +87,21 @@ http.createServer(async (req, res) => {
       const { vrn, pcn } = await readBody(req);
       const rec = load().find(r => norm(r.vrn) === norm(vrn) && norm(r.pcn) === norm(pcn));
       return rec ? send(res, 200, rec) : send(res, 404, { error: 'No matching record found.' });
+    }
+
+    // Stripe: create payment intent
+    if (p === '/api/create-payment-intent' && req.method === 'POST') {
+      if (!STRIPE_SECRET_KEY) return send(res, 500, { error: 'Stripe not configured' });
+      const { pcn, vrn } = await readBody(req);
+      const intent = await stripeRequest('POST', '/v1/payment_intents', {
+        amount: '10378',        // £103.78 in pence
+        currency: 'gbp',
+        'metadata[pcn]': pcn || '',
+        'metadata[vrn]': vrn || '',
+        'automatic_payment_methods[enabled]': 'true'
+      });
+      if (intent.error) return send(res, 400, { error: intent.error.message });
+      return send(res, 200, { clientSecret: intent.client_secret });
     }
 
     // Admin (password protected)

@@ -37,7 +37,7 @@
    <dt>Contravention</dt><dd id="s1-con"></dd>
    <dt>Amount due</dt><dd id="s1-amt" class="amount"></dd>
   </dl>
-  <div class="info-box"><b>Demo note:</b> Reduced (50%) amount shown if paid within 14 days. No real money will be taken.</div>
+  <div class="info-box"><b>Demo note:</b> No real money will be taken.</div>
   <div class="sub-actions">
    <button class="btn" onclick="goStep(2)">Continue</button>
    <a class="btn secondary" id="cancel-link1" href="#">Cancel</a>
@@ -136,23 +136,20 @@ fetch('/api/lookup', {method:'POST', headers:{'Content-Type':'application/json'}
   if (!r.ok) { document.getElementById('loading').hidden = false;
     document.getElementById('loading').innerHTML = '<p>Could not load PCN details. <a href="index.html">Return to search</a></p>'; return; }
   record = await r.json();
-  const full = 70, reduced = 35;
-  const issued = record.date ? new Date(record.date) : null;
-  const daysSince = issued ? Math.floor((Date.now() - issued) / 86400000) : 99;
-  amount = daysSince <= 14 ? reduced : full;
+  amount = 103.78;
   const date = record.date ? record.date.split('-').reverse().join('/') : '—';
   document.getElementById('s1-pcn').textContent = record.pcn;
   document.getElementById('s1-vrn').textContent = record.vrn;
   document.getElementById('s1-date').textContent = date;
   document.getElementById('s1-loc').textContent = record.location || '—';
   document.getElementById('s1-con').textContent = record.contravention || '—';
-  document.getElementById('s1-amt').textContent = `£${amount}.00`;
+  document.getElementById('s1-amt').textContent = `£${amount.toFixed(2)}`;
   document.getElementById('s3-pcn').textContent = record.pcn;
   document.getElementById('s3-vrn').textContent = record.vrn;
-  document.getElementById('s3-amt').textContent = `£${amount}.00`;
-  document.getElementById('s3-btn-amt').textContent = `£${amount}.00`;
+  document.getElementById('s3-amt').textContent = `£${amount.toFixed(2)}`;
+  document.getElementById('s3-btn-amt').textContent = `£${amount.toFixed(2)}`;
   document.getElementById('s4-pcn').textContent = record.pcn;
-  document.getElementById('s4-amt').textContent = `£${amount}.00`;
+  document.getElementById('s4-amt').textContent = `£${amount.toFixed(2)}`;
   document.getElementById('s4-date').textContent = new Date().toLocaleDateString('en-GB');
   document.getElementById('s4-ref').textContent = 'DPA-' + Math.random().toString(36).slice(2,10).toUpperCase();
   goStep(1);

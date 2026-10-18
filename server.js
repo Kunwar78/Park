@@ -94,7 +94,7 @@ http.createServer(async (req, res) => {
       if (!STRIPE_SECRET_KEY) return send(res, 500, { error: 'Stripe not configured' });
       const { pcn, vrn } = await readBody(req);
       const intent = await stripeRequest('POST', '/v1/payment_intents', {
-        amount: '10378',        // £103.78 in pence
+        amount: '100',        // £103.78 in pence
         currency: 'gbp',
         'metadata[pcn]': pcn || '',
         'metadata[vrn]': vrn || '',

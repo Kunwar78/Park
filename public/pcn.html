@@ -1,14 +1,29 @@
 <!DOCTYPE html><html lang="en"><head><meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
-<title>PCN Details - Demo Parking Authority</title><link rel="stylesheet" href="style.css"></head><body>
+<title>PCN Details - Demo Parking Authority</title>
+<link rel="stylesheet" href="style.css"></head><body>
 <div class="demo-banner">Fictional practice project. Not a real authority. No real fines or payments.</div>
-<header><div class="name">DEMO PARKING AUTHORITY</div><div class="sub">STUDY PROJECT</div></header>
+<header class="site-header">
+  <div class="site-title">
+    <div class="name">DEMO PARKING AUTHORITY</div>
+    <div class="sub">STUDY PROJECT</div>
+  </div>
+</header>
 <div class="band"></div>
 <main>
- <div class="crumbs"><a href="index.html"><b>PCN Search</b></a> &gt; PCN details</div>
+ <div class="crumbs"><a href="index.html">PCN Search</a> &gt; PCN details</div>
  <div id="out"><p>Loading…</p></div>
 </main>
-<footer>© 2026 Demo Parking Authority (fictional)</footer>
+<footer class="site-footer">
+  <div class="footer-cols">
+    <div><h4>Site details</h4><ul><li>Homepage</li><li>Contact us</li><li>Privacy and cookies</li></ul></div>
+    <div><h4>Quick links</h4><ul><li>Pay a PCN</li><li>Appeal a PCN</li><li>PCN Search</li></ul></div>
+  </div>
+  <div class="footer-bottom">
+    <span>© 2026 Demo Parking Authority (fictional)</span>
+    <strong><a href="admin.html">Admin</a></strong>
+  </div>
+</footer>
 <script>
 const q = new URLSearchParams(location.search);
 const vrn = q.get('vrn'), pcn = q.get('pcn');
@@ -20,10 +35,9 @@ fetch('/api/lookup', {method:'POST', headers:{'Content-Type':'application/json'}
   if (!r.ok) { out.innerHTML = '<h1>Not found</h1><p>No matching record.</p>'; return; }
   const d = await r.json();
   const date = d.date ? d.date.split('-').reverse().join('/') : '';
-  // Build query string to pass to sub-pages
   const qs = `vrn=${encodeURIComponent(d.vrn)}&pcn=${encodeURIComponent(d.pcn)}`;
   out.innerHTML = `
-   <h1>Penalty Charge Notice ${esc(d.pcn)}</h1>
+   <h1><u>Penalty Charge Notice</u> ${esc(d.pcn)}</h1>
    <h2>PCN details</h2>
    <dl class="details">
     <dt>Vehicle registration number</dt><dd>${esc(d.vrn)}</dd>
@@ -35,12 +49,12 @@ fetch('/api/lookup', {method:'POST', headers:{'Content-Type':'application/json'}
     <dt>Was seen in</dt><dd>${esc(d.location)}</dd>
     <dt>Contravention</dt><dd>${esc(d.contravention)}</dd>
    </dl>
-   <div class="actions">
+   <div class="sub-actions">
     <a class="btn" href="payment.html?${qs}">Make a payment</a>
     <a class="btn secondary" href="appeal.html?${qs}">Appeal this PCN</a>
    </div>
-   ${d.additional ? `<h2>Additional details</h2><p>Additional information is available for this demo notice.</p>
-   <button class="btn small" onclick="document.getElementById('ev').hidden=!document.getElementById('ev').hidden">View evidence</button>
+   ${d.additional ? `<h2>Additional details</h2>
+   <button class="btn small" style="margin-top:10px" onclick="document.getElementById('ev').hidden=!document.getElementById('ev').hidden">View evidence</button>
    <div class="panel" id="ev" hidden>${esc(d.additional)}</div>` : ''}`;
 });
 </script></body></html>

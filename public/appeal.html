@@ -1,7 +1,11 @@
 <!DOCTYPE html><html lang="en"><head><meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
 <title>Appeal PCN - [Authority Name]</title>
-<link rel="stylesheet" href="style.css"></head><body>
+<link rel="stylesheet" href="style.css">
+<style>
+  #step6 h1 { color: #000; font-weight: bold; }
+  #step6 .info-box { background: #faf5e0; border: 1px solid #f0e6b8; color: #7a6535; }
+</style></head><body>
 <header class="site-header">
   <div class="site-title">
     <div class="name">[AUTHORITY NAME]</div>
@@ -100,7 +104,6 @@
    <dt>Name</dt><dd id="s4-name"></dd>
    <dt>Email</dt><dd id="s4-email"></dd>
   </dl>
-  <div class="err" id="submit-err" hidden></div>
   <div class="sub-actions">
    <button class="btn" id="submit-btn" onclick="submitAppeal()">Submit appeal</button>
    <button class="btn secondary" onclick="goStep(3)">Back</button>
@@ -119,6 +122,11 @@
   </dl>
   <p>The authority will acknowledge your appeal within 3 working days.</p>
   <div class="sub-actions"><a class="btn" href="index.html">Return to PCN Search</a></div>
+ </div>
+
+ <div id="step6" class="step-panel" hidden>
+  <h1>Appeal not allowed</h1>
+  <div class="info-box">It is not possible to submit an appeal for this case</div>
  </div>
 </main>
 
@@ -169,10 +177,12 @@ fetch('/api/lookup', {method:'POST', headers:{'Content-Type':'application/json'}
   goStep(1);
 });
 function goStep(n) {
-  [1,2,3,4,5].forEach(i => {
+  [1,2,3,4,5,6].forEach(i => {
     document.getElementById('step' + i).hidden = (i !== n);
-    document.getElementById('s-ind-' + i).className = 'step' + (i < n ? ' done' : i === n ? ' active' : '');
+    const ind = document.getElementById('s-ind-' + i);
+    if (ind) ind.className = 'step' + (i < n ? ' done' : i === n ? ' active' : '');
   });
+  document.getElementById('step-bar').hidden = (n === 6);
 }
 function submitGrounds(e) {
   e.preventDefault();
@@ -196,8 +206,6 @@ function submitStatement(e) {
 }
 async function submitAppeal() {
   const btn = document.getElementById('submit-btn');
-  const errBox = document.getElementById('submit-err');
-  errBox.hidden = true;
   btn.disabled = true;
   try {
     const r = await fetch('/api/appeal', {method:'POST', headers:{'Content-Type':'application/json'},
@@ -209,8 +217,7 @@ async function submitAppeal() {
     document.getElementById('s5-date').textContent = new Date().toLocaleDateString('en-GB');
     goStep(5);
   } catch (e) {
-    errBox.textContent = 'Your appeal could not be submitted. Please try again.';
-    errBox.hidden = false;
+    goStep(6); // show "Appeal not allowed"
   } finally {
     btn.disabled = false;
   }

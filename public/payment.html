@@ -1,12 +1,10 @@
 <!DOCTYPE html><html lang="en"><head><meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
-<title>Make a Payment - Demo Parking Authority</title>
 <link rel="stylesheet" href="style.css">
 <script src="https://js.stripe.com/v3/"></script></head><body>
-<div class="demo-banner">Fictional practice project. No real payment is taken.</div>
 <header class="site-header">
   <div class="site-title">
-    <div class="name">DEMO PARKING AUTHORITY</div>
+    <div class="name">LUTON BOROUGH COUNCIL</div>
     <div class="sub">ONLINE PAYMENTS</div>
   </div>
 </header>
@@ -38,7 +36,6 @@
    <dt>Contravention</dt><dd id="s1-con"></dd>
    <dt>Amount due</dt><dd id="s1-amt" class="amount"></dd>
   </dl>
-  <div class="info-box"><b>Demo note:</b> No real money will be taken.</div>
   <div class="sub-actions">
    <button class="btn" onclick="goStep(2)">Continue</button>
    <a class="btn secondary" id="cancel-link1" href="#">Cancel</a>
@@ -76,7 +73,6 @@
    <dt>Name</dt><dd id="s3-name"></dd>
    <dt>Address</dt><dd id="s3-addr"></dd>
   </dl>
-  <div class="info-box"><b>This is a demo.</b> Clicking "Pay now" will NOT charge any card.</div>
   <h2>Card details</h2>
   <div class="row" style="max-width:100%">
    <label>Card number, expiry and CVV</label>
@@ -93,7 +89,6 @@
   <div class="success-box">
    <div class="tick">✓</div>
    <h1>Payment received</h1>
-   <p><b>Demo confirmation only — no real payment was taken.</b></p>
   </div>
   <dl class="details">
    <dt>PCN number</dt><dd id="s4-pcn"></dd>
@@ -101,7 +96,7 @@
    <dt>Payment reference</dt><dd id="s4-ref"></dd>
    <dt>Date</dt><dd id="s4-date"></dd>
   </dl>
-  <p>A confirmation has been sent to your email address (demo only).</p>
+  <p>A confirmation has been sent to your email address.</p>
   <div class="sub-actions"><a class="btn" href="index.html">Return to PCN Search</a></div>
  </div>
 </main>
@@ -118,7 +113,7 @@
     </div>
   </div>
   <div class="footer-bottom">
-    <span>© 2026 Demo Parking Authority (fictional)</span>
+    <span>© 2026 Council Parking Authority (fictional)</span>
   </div>
 </footer>
 <script>

@@ -1,8 +1,13 @@
 <!DOCTYPE html><html lang="en"><head><meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
 <title>PCN Details - LUTON BOROUGH COUNCIL</title>
-<link rel="stylesheet" href="style.css"></head><body>
+<link rel="stylesheet" href="style.css">
+<style>
+  .site-header { display: flex; align-items: center; gap: 14px; }
+  .site-header .logo { height: 64px; width: auto; display: block; }
+</style></head><body>
 <header class="site-header">
+  <img class="logo" src="IMG_1299.jpeg" alt="Luton Borough Council logo">
   <div class="site-title">
     <div class="name">LUTON BOROUGH COUNCIL</div>
   </div>
@@ -55,9 +60,6 @@ fetch('/api/lookup', {method:'POST', headers:{'Content-Type':'application/json'}
    <div class="sub-actions">
     <a class="btn" href="payment.html?${qs}">Make a payment</a>
     <a class="btn secondary" href="appeal.html?${qs}">Appeal this PCN</a>
-   </div>
-   ${d.additional ? `<h2>Additional details</h2>
-   <button class="btn small" style="margin-top:10px" onclick="document.getElementById('ev').hidden=!document.getElementById('ev').hidden">View evidence</button>
-   <div class="panel" id="ev" hidden>${esc(d.additional)}</div>` : ''}`;
+   </div>`;
 });
 </script></body></html>

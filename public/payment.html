@@ -121,7 +121,7 @@
 const esc = s => String(s ?? '').replace(/[&<>"]/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]));
 const q = new URLSearchParams(location.search);
 const vrn = q.get('vrn'), pcnNum = q.get('pcn');
-let record = null, amount = 103.78, fullName = '', fullAddr = '';
+let record = null, amount = 105, fullName = '', fullAddr = '';
 let stripe, cardElement, clientSecret;
 
 // Init Stripe
